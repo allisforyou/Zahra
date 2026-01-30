@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+<style>
+body {
+  margin:0; padding:0;
+  background: linear-gradient(#020617,#0f172a);
+  font-family:'Poppins',sans-serif; color:white; text-align:center; overflow:hidden;
+}
+h1 {
+  margin-top:10vh; font-size:4.5rem; letter-spacing:5px; font-weight:800;
+  text-shadow:0 0 20px #fff,0 0 40px #ff69b4; animation:glow 2s infinite alternate;
+}
+@keyframes glow { from { text-shadow:0 0 15px #ffffff55,0 0 25px #ff69b4aa;} to { text-shadow:0 0 40px #ffffffcc,0 0 80px #ff69b4ff;} }
+
+#nextBtn, #nextSurpriseBtn {
+  margin-top:20px; padding:12px 30px; font-size:1.3rem; border-radius:40px;
+  border:none; cursor:pointer; background:#fff; color:#d1006b; font-weight:bold; transition:0.3s;
+}
+#nextBtn:hover, #nextSurpriseBtn:hover { transform:scale(1.15); box-shadow:0 0 15px #fff; }
+
+.line { font-size:2rem; opacity:0; margin-top:20px; transform:translateY(30px); transition:opacity 1s, transform 1s; color:#ffb6c1; text-shadow:0 0 10px #fff; }
+.line.show { opacity:1; transform:translateY(0); }
+
+#surpriseBox { position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(0); width:320px; height:320px;
+background:linear-gradient(135deg,#1e293b,#3b0764); border-radius:25px; display:flex; justify-content:center; align-items:center; flex-direction:column;
+box-shadow:0 0 30px #ff69b4aa,0 0 60px #ffffff55; opacity:0; transition:transform 0.8s, opacity 0.8s; z-index:10; }
+#surpriseBox.show { transform:translate(-50%,-50%) scale(1); opacity:1; animation:popSurprise 1s ease forwards; }
+#surpriseText { font-size:1.8rem; color:#fff; text-align:center; text-shadow:0 0 10px #ff69b4; }
+
+@keyframes popSurprise { 0%{transform:translate(-50%,-50%) scale(0);opacity:0;} 50%{transform:translate(-50%,-50%) scale(1.2);opacity:1;} 100%{transform:translate(-50%,-50%) scale(1);opacity:1;} }
+
+.star { position:fixed;width:2px;height:2px;background:white;border-radius:50%;opacity:0.8;animation:twinkle 3s infinite ease-in-out; }
+@keyframes twinkle {0%,100%{opacity:0.2;}50%{opacity:1;}}
+
+canvas {position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none; z-index:5;}
+
+@media(max-width:768px){ h1{font-size:3rem;} .line{font-size:1.5rem;} #surpriseBox{width:240px;height:240px;} #surpriseText{font-size:1.4rem;} }
+</style>
+</head>
+<body>
+
+<h1>HAPPY BIRTHDAY</h1>
+<button id="nextBtn">surprise for my love 💕 
+</button>
+
+<div id="linesContainer">
+  <div class="line" id="line1">TU haseen tera Naam haseen hai</div>
+  <div class="line" id="line2">Tere ishq da jaam haseen hai</div>
+  <div class="line" id="line3">I love you Meri Jaan Meri Pyari Zahra ❤️</div>
+  <div class="line" id="line4">Mujhe aap har waqt yaad aati hain, issi liye aap ki birthday par ek chota sa surprise...</div>
+</div>
+
+<!-- Surprise Box -->
+<div id="surpriseBox">
+  <div id="surpriseText">This is for the prettiest girl I know 🌹💕</div>
+  <button id="nextSurpriseBtn">Next surprise 👉</button>
+</div>
+
+<iframe id="bgm" width="0" height="0" src="https://www.youtube.com/embed/7fsme4Nn6yw?autoplay=1&loop=1&playlist=7fsme4Nn6yw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+  // Stars
+  for(let i=0;i<120;i++){
+    let s=document.createElement("div"); s.className="star";
+    s.style.left=Math.random()*100+"vw"; s.style.top=Math.random()*100+"vh";
+    s.style.animationDuration=2+Math.random()*3+"s"; document.body.appendChild(s);
+  }
+
+  // Fireworks
+  const canvas=document.getElementById("fireworks"); const ctx=canvas.getContext("2d"); canvas.width=innerWidth; canvas.height=innerHeight; const fireworks=[];
+  function random(min,max){return Math.random()*(max-min)+min;}
+  class Firework{ constructor(){this.x=random(0,canvas.width); this.y=canvas.height; this.tx=random(0,canvas.width); this.ty=random(0,canvas.height/2); this.coordinates=[[this.x,this.y]]; this.speed=3; this.brightness=random(50,90);} update(i){this.coordinates.push([this.x,this.y]); this.coordinates.shift(); this.x+=Math.cos(Math.atan2(this.ty-this.y,this.tx-this.x))*this.speed; this.y+=Math.sin(Math.atan2(this.ty-this.y,this.tx-this.x))*this.speed; if(Math.hypot(this.tx-this.x,this.ty-this.y)<10) fireworks.splice(i,1);} draw(){ctx.beginPath(); ctx.moveTo(this.coordinates[0][0],this.coordinates[0][1]); ctx.lineTo(this.x,this.y); ctx.strokeStyle=`hsl(${random(0,360)},100%,${this.brightness}%)`; ctx.stroke();} }
+  function loop(){requestAnimationFrame(loop); ctx.globalCompositeOperation='destination-out'; ctx.fillStyle='rgba(0,0,0,0.2)'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.globalCompositeOperation='lighter'; if(Math.random()<0.08) fireworks.push(new Firework()); fireworks.forEach((fw,i)=>{fw.update(i); fw.draw();});} loop();
+
+  // Confetti
+  function createConfetti(){for(let i=0;i<100;i++){const conf=document.createElement("div"); conf.style.position="fixed"; conf.style.width=Math.random()*10+5+"px"; conf.style.height=Math.random()*10+5+"px"; conf.style.background=["#ff69b4","#ffb6c1","#fff","#f0f","#0ff"][Math.floor(Math.random()*5)]; conf.style.left=Math.random()*100+"vw"; conf.style.top="-20px"; conf.style.opacity=Math.random(); conf.style.borderRadius="50%"; conf.style.pointerEvents="none"; conf.style.animation=`confettiFall ${3+Math.random()*3}s linear forwards`; document.body.appendChild(conf); } }
+  const confettiStyle=document.createElement("style"); confettiStyle.innerHTML=`@keyframes confettiFall{to{transform:translateY(110vh) rotate(360deg); opacity:0;}}`; document.head.appendChild(confettiStyle);
+
+  // Show lines & surprise
+  document.getElementById("nextBtn").onclick=()=>{
+    document.getElementById("nextBtn").style.display="none";
+    let delay=500;
+    const lines=[document.getElementById("line1"),document.getElementById("line2"),document.getElementById("line3"),document.getElementById("line4")];
+    lines.forEach((line,index)=>{
+      setTimeout(()=>line.classList.add("show"),delay);
+      setTimeout(()=>line.classList.remove("show"),delay+3000);
+      delay+=4000;
+    });
+    setTimeout(()=>{
+      document.getElementById("surpriseBox").classList.add("show");
+      createConfetti();
+    },delay+500);
+  };
+
+  // Next surprise button
+  document.getElementById("nextSurpriseBtn").onclick=()=>{
+    window.open("page4.html","_blank"); // Open new page for proposal
+  };
+</script>
+
+</body>
+</html>

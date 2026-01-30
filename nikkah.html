@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nikkah Certificate 💍</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff4081;
+    --green:#34d399;
+    --bg:#fff0f6;
+    --card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Poppins',sans-serif;
+    background: radial-gradient(circle at top, #fff0f6, #dff7ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    padding:2vw;
+  }
+  .card{
+    background: var(--card);
+    padding: clamp(20px,3vw,40px);
+    border-radius:20px;
+    max-width:500px;
+    width:100%;
+    box-shadow:0 12px 40px rgba(0,0,0,0.12);
+    text-align:center;
+  }
+  h2{color:var(--pink); font-size:clamp(1.4rem,3vw,2rem); margin-bottom:1rem;}
+  input{
+    padding:0.8rem 1rem;
+    font-size:clamp(1rem,2.2vw,1.1rem);
+    width:80%;
+    margin-bottom:1rem;
+    border-radius:10px;
+    border:1px solid rgba(0,0,0,0.2);
+    outline:none;
+  }
+  .buttons{display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:1rem;}
+  button{
+    padding:0.6rem 1.2rem;
+    font-size:clamp(0.9rem,1.8vw,1rem);
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    transition:all 0.3s ease;
+  }
+  .yesBtn{background: var(--green); color:#fff;}
+  .noBtn{background: #ff5c5c; color:#fff;}
+  .disabled{opacity:0.5; cursor:not-allowed;}
+  .qabool{
+    font-size:clamp(1.2rem,2.5vw,1.5rem);
+    margin-top:1.5rem;
+    font-weight:700;
+    color:#333;
+    transition:all 0.5s ease;
+  }
+  .qabool.animate{
+    animation: glowPop 1s ease forwards;
+    color: var(--green);
+  }
+  @keyframes glowPop{
+    0%{ transform: scale(1); text-shadow:none; opacity:0;}
+    40%{ transform: scale(1.4); text-shadow:0 0 12px #34d399,0 0 24px #a3f7d4; opacity:1;}
+    70%{ transform: scale(1.2); text-shadow:0 0 8px #34d399,0 0 16px #a3f7d4;}
+    100%{ transform: scale(1); text-shadow:none; opacity:1;}
+  }
+  .talkBtn{
+    margin-top:1.5rem;
+    padding:0.7rem 1.5rem;
+    background: linear-gradient(45deg,#ff8a65,#ff4081);
+    color:white;
+    border:none;
+    border-radius:28px;
+    font-weight:700;
+    font-size:clamp(0.95rem,1.8vw,1rem);
+    cursor:pointer;
+    opacity:0.5;
+    pointer-events:none;
+  }
+  @media(max-width:480px){
+    .buttons{flex-direction:column;}
+    input{width:90%;}
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2>Nikkah Certificate</h2>
+    <input type="text" id="name" placeholder="Enter your Name">
+    <input type="number" id="age" placeholder="Enter your Age">
+    <div class="qabool" id="qaboolText">Qabool Hai x3</div>
+    <div class="buttons">
+      <button id="yesBtn" class="yesBtn disabled">Yes</button>
+      <button id="noBtn" class="noBtn disabled">No</button>
+    </div>
+    <button id="talkBtn" class="talkBtn">Talk with your husband</button>
+  </div>
+
+<script>
+const nameInput = document.getElementById('name');
+const ageInput = document.getElementById('age');
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const qaboolText = document.getElementById('qaboolText');
+const talkBtn = document.getElementById('talkBtn');
+
+// Enable Yes/No only if name and age filled
+function checkInputs(){
+  if(nameInput.value.trim() && ageInput.value.trim()){
+    yesBtn.classList.remove('disabled');
+    noBtn.classList.remove('disabled');
+    talkBtn.style.opacity = 0.5;
+    talkBtn.style.pointerEvents = 'none';
+  } else {
+    yesBtn.classList.add('disabled');
+    noBtn.classList.add('disabled');
+    talkBtn.style.opacity = 0.5;
+    talkBtn.style.pointerEvents = 'none';
+  }
+}
+nameInput.addEventListener('input', checkInputs);
+ageInput.addEventListener('input', checkInputs);
+
+// No button click
+noBtn.addEventListener('click', ()=>{
+  if(noBtn.classList.contains('disabled')) return;
+  noBtn.textContent = 'Yes';
+  noBtn.classList.remove('noBtn');
+  noBtn.classList.add('yesBtn');
+  qaboolText.classList.add('animate');
+  setTimeout(()=>{
+    alert(`Congratulations 🎉🥳 ${nameInput.value} on being married!`);
+    talkBtn.style.opacity = 1;
+    talkBtn.style.pointerEvents = 'auto';
+  },1000);
+});
+
+// Yes button click
+yesBtn.addEventListener('click', ()=>{
+  if(yesBtn.classList.contains('disabled')) return;
+  qaboolText.classList.add('animate');
+  setTimeout(()=>{
+    alert(`Congratulations 🎉🥳 ${nameInput.value} on being married!`);
+    talkBtn.style.opacity = 1;
+    talkBtn.style.pointerEvents = 'auto';
+  },1000);
+});
+
+// Talk button opens last.html
+talkBtn.addEventListener('click', ()=>{
+  if(nameInput.value.trim() && ageInput.value.trim()){
+    window.open('last.html','_blank');
+  }
+});
+</script>
+</body>
+</html>
